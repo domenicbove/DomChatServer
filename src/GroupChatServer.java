@@ -69,11 +69,7 @@ public class GroupChatServer {
 
 // Each instance of this class listens to ONE client, sends to ALL clients in same group
 class Listener extends Thread {
-    // Notice static and concurrent usage here
-	// ConcurrentLinkedQueue: really only need a concurrent list, but I couldn't find one in the library.  A Queue will suffice as a list.
-	//private static ConcurrentHashMap<String, ConcurrentLinkedQueue<PrintStream>> streamsHashMap = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PrintStream>>();
-	
-	// Start hashmap for all the groups
+    
 	private static ConcurrentHashMap<String, Group> groupsHashMap = new ConcurrentHashMap<String, Group>();
 	
 	private Socket socket;
@@ -86,7 +82,7 @@ class Listener extends Thread {
     	if (inStream != null)
     		try { inStream.close(); } catch (IOException ex) { /* we tried */ }
     	if (outStream != null)
-    		outStream.close(); // doesn't throw an exception
+    		outStream.close(); 
     	if (socket != null)
     		try { socket.close();   } catch (IOException ex) { /* we tried */ }
     }
@@ -187,7 +183,7 @@ class Listener extends Thread {
 	        		// Send the message to all group members, including self
 	        		for (PrintStream os: membersPrintStream)
 	        			synchronized(os) {
-	        				os.println(data); // including self; could compare os==outStream to avoid self
+	        				os.println(data);
 	        		}
 	        	}
 	        	
